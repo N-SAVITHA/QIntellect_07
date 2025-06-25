@@ -1,0 +1,55 @@
+.home-section {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../assets/image.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  padding: 0 20px;
+  overflow: hidden;
+  margin-top: 47px;
+}
+
+.home-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 90%;
+}
+
+.home-overlay h2 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.home-overlay p {
+  font-size: 18px;
+}
+
+@media screen and (max-width: 768px) {
+  .home-section {
+    padding-top: 100px; /* Adjust based on your fixed navbar height */
+    align-items: flex-start;
+  }
+
+  .home-overlay {
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.6);
+  }
+
+  .home-overlay h2 {
+    font-size: 24px;
+  }
+
+  .home-overlay p {
+    font-size: 14px;
+  }
+}

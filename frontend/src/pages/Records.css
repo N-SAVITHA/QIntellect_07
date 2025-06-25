@@ -1,0 +1,106 @@
+.records-section {
+  padding: 40px 20px;
+  background-color: #f0f4f8;
+  min-height: 100vh;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 57px; /* adjust if your fixed navbar is larger */
+}
+
+.records-section h2 {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.records-section p {
+  font-size: 16px;
+  color: #4b5563;
+  margin-bottom: 30px;
+}
+
+.records-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.record-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: transform 0.2s ease;
+}
+
+.record-card:hover {
+  transform: translateY(-5px);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.card-icon {
+  font-size: 24px;
+  color: #2563eb;
+}
+
+.record-card ul {
+  list-style: none;
+  padding-left: 0;
+  color: #374151;
+  font-size: 15px;
+}
+
+.record-card li {
+  margin-bottom: 8px;
+}
+
+.record-card.blue { border-left: 5px solid #3b82f6; }
+.record-card.green { border-left: 5px solid #10b981; }
+.record-card.yellow { border-left: 5px solid #facc15; }
+.record-card.purple { border-left: 5px solid #8b5cf6; }
+
+/* ✅ Mobile View Fixes */
+@media (max-width: 768px) {
+  .records-section {
+    margin-top: 80px; /* ensure space for navbar */
+    padding: 20px 16px;
+  }
+
+  .records-section h2 {
+    font-size: 24px;
+  }
+
+  .records-section p {
+    font-size: 14px;
+  }
+
+  .records-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .record-card {
+    padding: 16px;
+  }
+
+  .card-icon {
+    font-size: 20px;
+  }
+
+  .record-card ul {
+    font-size: 14px;
+  }
+
+  .record-card li {
+    margin-bottom: 6px;
+  }
+}

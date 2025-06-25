@@ -1,0 +1,80 @@
+/* BPMonitor.css */
+
+.bp-container {
+  padding: 24px;
+  max-width: 500px;
+  margin: 40px auto;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bp-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 24px;
+}
+
+.bp-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.bp-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.bp-button {
+  width: 100%;
+  background-color: #2563eb;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bp-button:hover {
+  background-color: #1d4ed8;
+}
+
+.robot-animation {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.robo-gif {
+  /* Animation-safe CSS */
+  width: 200px;
+  height: auto;
+  animation: none; /* this could prevent CSS animations, but doesn't affect gifs */
+}
+/* Checkup.css */
+@keyframes slideIn {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.checkup-form {
+  animation: slideIn 0.6s ease-out;
+}

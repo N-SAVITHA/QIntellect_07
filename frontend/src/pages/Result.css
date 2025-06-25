@@ -1,0 +1,46 @@
+.results-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 1.5rem;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    background: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.results-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 1rem 0;
+    font-size: 1.1rem;
+}
+
+.positive {
+    color: red;
+    font-weight: bold;
+}
+
+.negative {
+    color: green;
+    font-weight: bold;
+}
+
+.bmi.overweight {
+    color: orange;
+    font-weight: bold;
+}
+
+.bmi.optimal {
+    color: green;
+    font-weight: bold;
+}
+
+.bmi.underweight {
+    color: blue;
+    font-weight: bold;
+}

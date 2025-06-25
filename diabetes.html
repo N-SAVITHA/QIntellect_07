@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QCNN Circuit Diagram</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .circuit-container {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .circuit-svg {
+            width: 100%;
+            min-width: 800px;
+            height: auto;
+        }
+        
+        .layer-description {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .qubit-line {
+            stroke: #333;
+            stroke-width: 2;
+            fill: none;
+        }
+        
+        .gate {
+            fill: #4CAF50;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .gate-text {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: central;
+            fill: white;
+            font-weight: bold;
+        }
+        
+        .cnot-control {
+            fill: #333;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .cnot-target {
+            fill: none;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .cnot-line {
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .measurement {
+            fill: #FF9800;
+            stroke: #333;
+            stroke-width: 2;
+        }
+        
+        .layer-label {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-anchor: middle;
+            fill: #333;
+        }
+        
+        .qubit-label {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            text-anchor: middle;
+            fill: #333;
+            font-weight: bold;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .btn {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        #qubit-slider {
+            width: 200px;
+            margin: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔮 Quantum Convolutional Neural Network Circuit</h1>
+        
+        <div class="layer-description">
+            <h3>Circuit Overview</h3>
+            <p>This QCNN implements a quantum circuit with data encoding, convolutional layers, entanglement, and pooling operations for diabetes prediction.</p>
+        </div>
+        
+        <div class="controls">
+            <button class="btn" onclick="animateCircuit()">▶️ Animate Circuit</button>
+            <label for="qubit-slider">Qubits: </label>
+            <input type="range" id="qubit-slider" min="4" max="8" value="8" onchange="updateQubits(this.value)">
+            <span id="qubit-count">8</span>
+        </div>
+        
+        <div class="circuit-container">
+            <svg id="circuit-svg" class="circuit-svg" viewBox="0 0 1000 400">
+                <!-- This will be populated by JavaScript -->
+            </svg>
+        </div>
+        
+        <div class="layer-description">
+            <h3>🎯 Layer Breakdown</h3>
+            <ul>
+                <li><strong>Data Encoding:</strong> RY rotations encode classical data into quantum states</li>
+                <li><strong>Conv Layer 1:</strong> RY and RZ rotations with learnable parameters</li>
+                <li><strong>Entanglement:</strong> CNOT gates create quantum correlations between adjacent qubits</li>
+                <li><strong>Conv Layer 2:</strong> Second set of parameterized rotations</li>
+                <li><strong>Pooling:</strong> Partial measurements reduce dimensionality</li>
+                <li><strong>Output:</strong> Expectation value of Pauli-Z on qubit 0</li>
+            </ul>
+        </div>
+        
+        <div class="layer-description">
+            <h3>📊 Architecture Details</h3>
+            <p><strong>Input:</strong> 8D PCA-reduced features → Quantum encoding → Convolutional processing → Classical post-processing</p>
+            <p><strong>Parameters:</strong> Quantum weights (conv + pooling) + Classical dense layers (1→16→1)</p>
+            <p><strong>Output:</strong> Binary classification probability for diabetes prediction</p>
+        </div>
+    </div>
+
+    <script>
+        let currentQubits = 8;
+        let animationRunning = false;
+
+        function createCircuit(nQubits) {
+            const svg = document.getElementById('circuit-svg');
+            const width = 1000;
+            const height = 80 * nQubits + 40;
+            svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+            
+            // Clear previous content
+            svg.innerHTML = '';
+            
+            const qubitSpacing = 60;
+            const gateWidth = 40;
+            const gateHeight = 30;
+            const startX = 80;
+            const layerSpacing = 120;
+            
+            // Draw qubit lines
+            for (let i = 0; i < nQubits; i++) {
+                const y = 40 + i * qubitSpacing;
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', startX);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', width - 50);
+                line.setAttribute('y2', y);
+                line.setAttribute('class', 'qubit-line');
+                svg.appendChild(line);
+                
+                // Qubit labels
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', 30);
+                label.setAttribute('y', y + 5);
+                label.setAttribute('class', 'qubit-label');
+                label.textContent = `q${i}`;
+                svg.appendChild(label);
+            }
+            
+            let currentX = startX + 30;
+            
+            // Layer labels
+            const layers = ['Data Encoding', 'Conv Layer 1', 'Entanglement', 'Conv Layer 2', 'Pooling', 'Measurement'];
+            const layerPositions = [currentX, currentX + layerSpacing, currentX + 2*layerSpacing, currentX + 3*layerSpacing, currentX + 4*layerSpacing, currentX + 5*layerSpacing];
+            
+            layers.forEach((layer, idx) => {
+                const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                label.setAttribute('x', layerPositions[idx]);
+                label.setAttribute('y', 20);
+                label.setAttribute('class', 'layer-label');
+                label.textContent = layer;
+                svg.appendChild(label);
+            });
+            
+            // Data Encoding Layer - RY gates
+            for (let i = 0; i < nQubits; i++) {
+                const y = 40 + i * qubitSpacing;
+                createGate(svg, currentX, y, 'RY', 'gate', `data-encoding-${i}`);
+            }
+            currentX += layerSpacing;
+            
+            // First Convolutional Layer - RY and RZ gates
+            for (let i = 0; i < nQubits; i++) {
+                const y = 40 + i * qubitSpacing;
+                createGate(svg, currentX - 20, y, 'RY', 'gate', `conv1-ry-${i}`);
+                createGate(svg, currentX + 20, y, 'RZ', 'gate', `conv1-rz-${i}`);
+            }
+            currentX += layerSpacing;
+            
+            // Entanglement Layer - CNOT gates
+            for (let i = 0; i < nQubits - 1; i++) {
+                const y1 = 40 + i * qubitSpacing;
+                const y2 = 40 + (i + 1) * qubitSpacing;
+                createCNOT(svg, currentX, y1, y2, `cnot-${i}`);
+            }
+            currentX += layerSpacing;
+            
+            // Second Convolutional Layer - RY and RZ gates
+            for (let i = 0; i < nQubits; i++) {
+                const y = 40 + i * qubitSpacing;
+                createGate(svg, currentX - 20, y, 'RY', 'gate', `conv2-ry-${i}`);
+                createGate(svg, currentX + 20, y, 'RZ', 'gate', `conv2-rz-${i}`);
+            }
+            currentX += layerSpacing;
+            
+            // Pooling Layer - RY gates on first half
+            for (let i = 0; i < Math.floor(nQubits / 2); i++) {
+                const y = 40 + i * qubitSpacing;
+                createGate(svg, currentX, y, 'RY', 'gate', `pool-${i}`);
+            }
+            currentX += layerSpacing;
+            
+            // Measurement on first qubit
+            const y = 40;
+            createMeasurement(svg, currentX, y, 'measurement-0');
+        }
+        
+        function createGate(svg, x, y, label, className, id) {
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.setAttribute('id', id);
+            
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', x - 20);
+            rect.setAttribute('y', y - 15);
+            rect.setAttribute('width', 40);
+            rect.setAttribute('height', 30);
+            rect.setAttribute('rx', 5);
+            rect.setAttribute('class', className);
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', x);
+            text.setAttribute('y', y);
+            text.setAttribute('class', 'gate-text');
+            text.textContent = label;
+            
+            group.appendChild(rect);
+            group.appendChild(text);
+            svg.appendChild(group);
+        }
+        
+        function createCNOT(svg, x, y1, y2, id) {
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.setAttribute('id', id);
+            
+            // Control dot
+            const control = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            control.setAttribute('cx', x);
+            control.setAttribute('cy', y1);
+            control.setAttribute('r', 5);
+            control.setAttribute('class', 'cnot-control');
+            
+            // Target circle
+            const target = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            target.setAttribute('cx', x);
+            target.setAttribute('cy', y2);
+            target.setAttribute('r', 15);
+            target.setAttribute('class', 'cnot-target');
+            
+            // Target cross
+            const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line1.setAttribute('x1', x - 10);
+            line1.setAttribute('y1', y2);
+            line1.setAttribute('x2', x + 10);
+            line1.setAttribute('y2', y2);
+            line1.setAttribute('class', 'cnot-line');
+            
+            const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line2.setAttribute('x1', x);
+            line2.setAttribute('y1', y2 - 10);
+            line2.setAttribute('x2', x);
+            line2.setAttribute('y2', y2 + 10);
+            line2.setAttribute('class', 'cnot-line');
+            
+            // Connection line
+            const connection = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            connection.setAttribute('x1', x);
+            connection.setAttribute('y1', y1);
+            connection.setAttribute('x2', x);
+            connection.setAttribute('y2', y2);
+            connection.setAttribute('class', 'cnot-line');
+            
+            group.appendChild(connection);
+            group.appendChild(control);
+            group.appendChild(target);
+            group.appendChild(line1);
+            group.appendChild(line2);
+            svg.appendChild(group);
+        }
+        
+        function createMeasurement(svg, x, y, id) {
+            const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+            group.setAttribute('id', id);
+            
+            const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            rect.setAttribute('x', x - 25);
+            rect.setAttribute('y', y - 20);
+            rect.setAttribute('width', 50);
+            rect.setAttribute('height', 40);
+            rect.setAttribute('rx', 8);
+            rect.setAttribute('class', 'measurement');
+            
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', x);
+            text.setAttribute('y', y - 5);
+            text.setAttribute('class', 'gate-text');
+            text.textContent = '⟨Z⟩';
+            
+            const text2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text2.setAttribute('x', x);
+            text2.setAttribute('y', y + 10);
+            text2.setAttribute('class', 'gate-text');
+            text2.setAttribute('font-size', '10');
+            text2.textContent = 'q0';
+            
+            group.appendChild(rect);
+            group.appendChild(text);
+            group.appendChild(text2);
+            svg.appendChild(group);
+        }
+        
+        function updateQubits(value) {
+            currentQubits = parseInt(value);
+            document.getElementById('qubit-count').textContent = value;
+            createCircuit(currentQubits);
+        }
+        
+        function animateCircuit() {
+            if (animationRunning) return;
+            animationRunning = true;
+            
+            const gates = document.querySelectorAll('#circuit-svg g');
+            gates.forEach((gate, index) => {
+                setTimeout(() => {
+                    gate.style.opacity = '0.3';
+                    gate.style.transform = 'scale(1.2)';
+                    gate.style.transition = 'all 0.3s ease';
+                    
+                    setTimeout(() => {
+                        gate.style.opacity = '1';
+                        gate.style.transform = 'scale(1)';
+                        
+                        if (index === gates.length - 1) {
+                            setTimeout(() => {
+                                animationRunning = false;
+                            }, 300);
+                        }
+                    }, 300);
+                }, index * 200);
+            });
+        }
+        
+        // Initialize circuit
+        createCircuit(currentQubits);
+    </script>
+</body>
+</html>
